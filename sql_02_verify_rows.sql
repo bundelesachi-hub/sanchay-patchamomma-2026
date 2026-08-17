@@ -1,0 +1,1 @@
+SELECT COUNT(*) as row_count FROM `project-b9c76805-d23b-435a-ab1.sanchay_core.agg_town_division_month`;

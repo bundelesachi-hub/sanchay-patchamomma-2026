@@ -1,0 +1,1 @@
+SELECT COUNT(*) as violations FROM `project-b9c76805-d23b-435a-ab1.sanchay_core.agg_town_division_month` WHERE ABS(secondary_sales - reconstructed_sales) > 1.0;

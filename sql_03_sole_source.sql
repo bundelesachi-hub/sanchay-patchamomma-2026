@@ -1,0 +1,1 @@
+SELECT distributor_count, COUNT(*) as cells FROM `project-b9c76805-d23b-435a-ab1.sanchay_core.agg_town_division_month` GROUP BY 1 ORDER BY 1;

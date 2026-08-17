@@ -1,0 +1,92 @@
+[
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00001",
+    "division": "AC"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00001",
+    "division": "Cable"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00001",
+    "division": "Kitchen"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00001",
+    "division": "Lighting"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00001",
+    "division": "Wire"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00002",
+    "division": "Cable"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00002",
+    "division": "Kitchen"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00002",
+    "division": "Lighting"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00002",
+    "division": "WaterHeater"
+  },
+  {
+    "primary_cause": "distributor_count",
+    "confidence": 0.95,
+    "explanation": "Sole-sourced distributor went dark (D dropped from 1 to 0)",
+    "sole_sourced": true,
+    "recommended_action": "CRITICAL: Appoint second distributor immediately. 174 retailers have zero supply.",
+    "town_id": "T00002",
+    "division": "Wire"
+  }
+]

@@ -1,0 +1,1 @@
+SELECT COUNT(*) as alert_count FROM `project-b9c76805-d23b-435a-ab1.sanchay_core.alerts`;

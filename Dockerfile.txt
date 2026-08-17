@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy code
+COPY . .
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+    google-cloud-bigquery \
+    google-cloud-aiplatform \
+    fastapi \
+    uvicorn \
+    requests
+
+# Run app
+CMD exec uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}
