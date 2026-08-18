@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 import logging
-import sys
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,9 +26,10 @@ def root():
 
 @app.post("/investigate")
 def api_investigate(town_id: str, division: str):
-    """Investigate anomaly"""
+    """Investigate anomaly - import only when needed"""
     try:
         logger.info(f"Investigating {town_id} {division}")
+        # Import only when endpoint is called, not at startup
         from agents.orchestrator import investigate
         result = investigate(town_id, division)
         result["town_id"] = town_id
