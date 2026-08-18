@@ -1,9 +1,10 @@
-.venv
+.git
+.gitignore
 __pycache__
 *.pyc
-.git
-.env
-data/
-investigation_results.json
-investigation_errors.json
-INVESTIGATION_REPORT.md
+*.pyo
+.pytest_cache
+.venv
+venv
+*.egg-info
+.DS_Store
