@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanchay - Supply Chain Anomaly Detection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover { transform: translateY(-2px); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        .results {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+        }
+        
+        .success { color: #27ae60; }
+        .error { color: #e74c3c; }
+        .info { color: #3498db; }
+        
+        .about {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        
+        .metric {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .metric:last-child { border-bottom: none; }
+        .metric strong { color: #667eea; }
+        
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        footer a { color: #667eea; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        
+        @media (max-width: 768px) {
+            .main { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Sanchay</h1>
+            <p>Supply Chain Anomaly Detection for FMCG Distribution</p>
+        </header>
+        
+        <div class="main">
+            <div class="section">
+                <h2>Investigate Anomaly</h2>
+                
+                <div class="form-group">
+                    <label for="townId">Town ID</label>
+                    <input type="text" id="townId" value="T00001" placeholder="e.g., T00001">
+                </div>
+                
+                <div class="form-group">
+                    <label for="division">Division</label>
+                    <select id="division">
+                        <option>AC</option>
+                        <option>Lighting</option>
+                        <option>Fans</option>
+                        <option>Water Heaters</option>
+                        <option>Kitchen</option>
+                    </select>
+                </div>
+                
+                <button id="investigateBtn" onclick="investigate()">🔍 Investigate</button>
+                
+                <div id="results" class="results" style="display:none;"></div>
+            </div>
+            
+            <div class="section">
+                <h2>About Sanchay</h2>
+                
+                <div class="about">
+                    <div class="metric">
+                        <strong>Five-Factor Decomposition</strong>
+                        <p>S = D × (R/D) × a × f × v</p>
+                        <ul style="margin-left: 20px; margin-top: 5px; font-size: 0.9em;">
+                            <li><strong>D</strong>: Distributor count</li>
+                            <li><strong>R/D</strong>: Retailers per distributor</li>
+                            <li><strong>a</strong>: Activation rate</li>
+                            <li><strong>f</strong>: Order frequency</li>
+                            <li><strong>v</strong>: Average value</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>Evaluation Results</strong>
+                        <p>✅ 100 anomalies tested</p>
+                        <p>✅ 94% precision</p>
+                        <p>✅ 100% sole-sourced failures detected</p>
+                        <p>✅ 0.95 avg confidence</p>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>Technology Stack</strong>
+                        <p>BigQuery | Vertex AI Gemini | FastAPI | Cloud Run</p>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>Resources</strong>
+                        <p><a href="https://github.com/bundelesachi-hub/sanchay-patchamomma-2026" target="_blank">GitHub Repository</a></p>
+                        <p><a href="https://medium.com/@bundelesachi/sanchay-detecting-supply-chain-collapse-in-fmcg-distribution-networks-af3ae377ae05" target="_blank">Technical Article</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Sanchay | Patchamomma 2026 | Google Cloud Platform</p>
+            <p>Built with BigQuery, Vertex AI Gemini, FastAPI, Cloud Run</p>
+        </footer>
+    </div>
+    
+    <script>
+        const API_URL = "https://sanchay-406748015906.us-central1.run.app";
+        
+        async function investigate() {
+            const townId = document.getElementById("townId").value;
+            const division = document.getElementById("division").value;
+            const resultsDiv = document.getElementById("results");
+            const btn = document.getElementById("investigateBtn");
+            
+            if (!townId) {
+                alert("Please enter a Town ID");
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerText = "🔄 Investigating...";
+            resultsDiv.style.display = "block";
+            resultsDiv.innerHTML = '<span class="info">Investigating...</span>';
+            
+            try {
+                const response = await fetch(`${API_URL}/investigate?town_id=${townId}&division=${division}`, {
+                    method: "POST"
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultsDiv.innerHTML = `<span class="success">✅ Investigation Complete\n\n</span>${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultsDiv.innerHTML = `<span class="error">❌ API Error: ${response.status}</span>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "🔍 Investigate";
+            }
+        }
+        
+        // Test API on load
+        fetch(`${API_URL}/health`)
+            .then(r => r.json())
+            .then(data => console.log("✅ API Connected"))
+            .catch(e => console.log("❌ API Error"));
+    </script>
+</body>
+</html>

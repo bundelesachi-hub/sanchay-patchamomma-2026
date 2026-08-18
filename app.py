@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import logging
 import os
 
@@ -14,10 +15,12 @@ def health():
 
 @app.get("/")
 def root():
-    return {"service": "Sanchay", "version": "1.0"}
+    """Serve HTML dashboard"""
+    return FileResponse("index.html", media_type="text/html")
 
 @app.post("/investigate")
 def api_investigate(town_id: str, division: str):
+    """Investigate anomaly"""
     try:
         logger.info(f"Investigating {town_id} {division}")
         from agents.orchestrator import investigate
@@ -25,8 +28,17 @@ def api_investigate(town_id: str, division: str):
         return {"town_id": town_id, "division": division, "result": result}
     except Exception as e:
         logger.error(f"Error: {str(e)}")
-        return {"error": str(e)[:200]}, 500
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)[:200]}
+        )
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    logger.info("Starting Sanchay API...")
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8080,
+        log_level="info"
+    )
