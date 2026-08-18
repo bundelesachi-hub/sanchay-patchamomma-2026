@@ -1,60 +1,53 @@
-"""
-Cloud Run FastAPI service for Sanchay investigations.
-"""
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-import json
-import os
+import logging
+import sys
 
-from agents.orchestrator import investigate
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Sanchay Investigation API", version="1.0")
+app = FastAPI(title="Sanchay API", version="1.0")
 
 @app.get("/health")
 def health():
-    """Health check."""
-    return {"status": "ok"}
+    """Health check endpoint"""
+    return {"status": "ok", "service": "sanchay"}
+
+@app.get("/")
+def root():
+    """Root endpoint"""
+    return {
+        "service": "Sanchay",
+        "version": "1.0",
+        "endpoints": {
+            "health": "/health",
+            "investigate": "/investigate?town_id=T00001&division=AC"
+        }
+    }
 
 @app.post("/investigate")
 def api_investigate(town_id: str, division: str):
-    """
-    Investigate an anomaly.
-    
-    Example:
-    POST /investigate?town_id=T00001&division=AC
-    """
+    """Investigate anomaly"""
     try:
+        logger.info(f"Investigating {town_id} {division}")
+        from agents.orchestrator import investigate
         result = investigate(town_id, division)
         result["town_id"] = town_id
         result["division"] = division
         return JSONResponse(content=result)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/summary")
-def api_summary():
-    """
-    Get investigation summary report.
-    """
-    try:
-        with open("investigation_results.json", "r") as f:
-            results = json.load(f)
-        
-        # Quick summary
-        causes = {}
-        for r in results:
-            cause = r.get("primary_cause", "unknown")
-            causes[cause] = causes.get(cause, 0) + 1
-        
-        return {
-            "total_investigated": len(results),
-            "causes": causes,
-            "avg_confidence": sum([r.get("confidence", 0) for r in results]) / len(results) if results else 0
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error: {str(e)}")
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)[:200]}
+        )
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    logger.info("Starting Sanchay API...")
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8080,
+        log_level="info"
+    )
