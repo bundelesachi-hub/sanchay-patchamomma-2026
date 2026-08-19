@@ -1,4 +1,4 @@
- 	<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        /* Operator Console style */
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap');
         
         :root {
@@ -57,7 +56,6 @@
             min-height: 100vh;
         }
         
-        /* HEADER */
         .app-header {
             height: 70px;
             background: #fff;
@@ -127,7 +125,6 @@
             font: 10px "IBM Plex Mono";
         }
         
-        /* SIDEBAR */
         .app-body {
             display: flex;
             min-height: calc(100vh - 70px);
@@ -234,7 +231,6 @@
             background: #769a43;
         }
         
-        /* MAIN CANVAS */
         .main-canvas {
             flex: 1;
             min-width: 0;
@@ -267,7 +263,6 @@
             font-weight: 500;
         }
         
-        /* INTRO CALLOUT */
         .intro-callout {
             background: var(--dark);
             color: #fff;
@@ -333,7 +328,6 @@
             line-height: 1.4;
         }
         
-        /* METRIC ROW */
         .metric-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -370,7 +364,6 @@
             color: #889087;
         }
         
-        /* DIAGNOSIS LAYOUT */
         .diagnosis-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -451,7 +444,6 @@
             transform: translateY(-1px);
         }
         
-        /* RESULT CARD */
         .result-card {
             margin-top: 23px;
             padding: 0;
@@ -583,7 +575,6 @@
             border-radius: 3px;
         }
         
-        /* MAP */
         #mapDisplay {
             height: 420px;
             border-radius: 4px;
@@ -632,7 +623,6 @@
             display: inline-block;
         }
         
-        /* UPLOAD */
         .upload-surface {
             border: 1px dashed #bac3b7;
             background: #f7f9f5;
@@ -681,7 +671,6 @@
             color: #fff;
         }
         
-        /* TABS */
         .tab-content {
             display: none;
         }
@@ -717,7 +706,6 @@
             border-bottom-color: var(--coral);
         }
         
-        /* FOOTER */
         footer {
             margin-top: 32px;
             border-top: 1px solid var(--border);
@@ -734,7 +722,6 @@
             text-decoration: none;
         }
         
-        /* ALERT */
         .alert {
             padding: 15px;
             border-radius: 5px;
@@ -759,10 +746,192 @@
             display: block;
         }
         
-        /* RESPONSIVE */
+        /* PROBLEM PAGE STYLES */
+        .problem-intro {
+            background: var(--dark);
+            color: #fff;
+            border-radius: 6px;
+            padding: 42px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 22px rgba(34, 37, 33, 0.08);
+        }
+        
+        .problem-intro h1 {
+            font: 700 42px "Space Grotesk";
+            letter-spacing: -0.04em;
+            margin: 0 0 20px;
+        }
+        
+        .problem-intro p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #bbc2b9;
+            max-width: 800px;
+            margin: 0;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 23px;
+            margin-bottom: 30px;
+        }
+        
+        .problem-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 27px;
+        }
+        
+        .problem-card h3 {
+            font: 600 19px "Space Grotesk";
+            margin: 0 0 15px;
+        }
+        
+        .problem-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .problem-card li {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #555;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .problem-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .problem-card strong {
+            color: var(--coral);
+            font-weight: 600;
+        }
+        
+        .stat-showcase {
+            background: linear-gradient(135deg, var(--dark) 0%, #3d4539 100%);
+            color: #fff;
+            border-radius: 6px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 22px rgba(34, 37, 33, 0.08);
+        }
+        
+        .stat-showcase h3 {
+            font: 10px "IBM Plex Mono";
+            color: var(--lime);
+            letter-spacing: 0.13em;
+            margin: 0 0 15px;
+        }
+        
+        .stat-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-showcase-item {
+            text-align: center;
+        }
+        
+        .stat-showcase-item b {
+            font: 700 38px "Space Grotesk";
+            color: var(--coral);
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .stat-showcase-item span {
+            font-size: 13px;
+            color: #bbc2b9;
+        }
+        
+        .impact-section {
+            background: #fff6f4;
+            border-left: 5px solid var(--coral);
+            border-radius: 6px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .impact-section h3 {
+            font: 600 19px "Space Grotesk";
+            color: var(--ink);
+            margin: 0 0 15px;
+        }
+        
+        .impact-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .impact-item {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .impact-item strong {
+            color: var(--coral);
+        }
+        
+        .data-table-wrapper {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 25px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        .data-table th {
+            font: 600 11px "IBM Plex Mono";
+            color: var(--muted);
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 2px solid var(--border);
+            background: #f8f9f7;
+        }
+        
+        .data-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9f7;
+        }
+        
+        .data-highlight {
+            background: #fff3e0;
+            color: var(--coral);
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+        
         @media(max-width: 960px) {
             .diagnosis-layout {
                 grid-template-columns: 1fr;
+            }
+            
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-showcase-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .metric-row {
@@ -779,20 +948,7 @@
                 padding: 26px 15px 25px;
             }
             
-            .page-topline h1 {
-                font-size: 29px;
-            }
-            
-            .intro-callout {
-                grid-template-columns: 1fr;
-                padding: 20px;
-            }
-            
-            .metric-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .result-grid {
+            .impact-list {
                 grid-template-columns: 1fr;
             }
         }
@@ -820,6 +976,7 @@
             <aside class="sidebar">
                 <div class="sidebar-label">DIAGNOSTICS</div>
                 <button class="side-link active" onclick="switchTab('diagnose')">🔍 Quick Diagnosis</button>
+                <button class="side-link" onclick="switchTab('problem')">⚠️ The Problem</button>
                 <button class="side-link" onclick="switchTab('map')">🗺️ Impact Map</button>
                 <button class="side-link" onclick="switchTab('analyze')">📊 Data Analysis</button>
                 <button class="side-link" onclick="switchTab('learn')">📚 Learn System</button>
@@ -850,48 +1007,45 @@
                     </div>
                 </div>
                 
-                <!-- INTRO CALLOUT -->
-                <div class="intro-callout">
-                    <div class="callout-icon">⚡</div>
-                    <div>
-                        <div class="callout-kicker">PROBLEM DETECTED</div>
-                        <h2>Your supply chain has <span>critical fragility</span></h2>
-                        <p>75% of your towns depend on a single distributor. When they disappear, your entire business stops. Sanchay analyzes your sales data to diagnose exactly what's broken—and how to fix it.</p>
-                    </div>
-                    <div class="callout-stat">
-                        <strong>94%</strong>
-                        <span>Diagnostic Accuracy</span>
-                    </div>
-                </div>
-                
-                <!-- METRICS -->
-                <div class="metric-row">
-                    <div>
-                        <span>ACCURACY</span>
-                        <b>94<b style="font-size: 16px">%</b></b>
-                        <small>Cases Verified</small>
-                    </div>
-                    <div>
-                        <span>SPEED</span>
-                        <b>2<b style="font-size: 16px">s</b></b>
-                        <small>Diagnosis Time</small>
-                    </div>
-                    <div>
-                        <span>FACTORS</span>
-                        <b>5<b style="font-size: 16px">×</b></b>
-                        <small>Independent Analysis</small>
-                    </div>
-                    <div>
-                        <span>CONFIDENCE</span>
-                        <b>95<b style="font-size: 16px">%</b></b>
-                        <small>Average</small>
-                    </div>
-                </div>
-                
                 <!-- DIAGNOSIS TAB -->
                 <div id="diagnose" class="tab-content active">
+                    <div class="intro-callout">
+                        <div class="callout-icon">⚡</div>
+                        <div>
+                            <div class="callout-kicker">PROBLEM DETECTED</div>
+                            <h2>Your supply chain has <span>critical fragility</span></h2>
+                            <p>75% of your towns depend on a single distributor. When they disappear, your entire business stops. Sanchay analyzes your sales data to diagnose exactly what's broken—and how to fix it.</p>
+                        </div>
+                        <div class="callout-stat">
+                            <strong>94%</strong>
+                            <span>Diagnostic Accuracy</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-row">
+                        <div>
+                            <span>ACCURACY</span>
+                            <b>94<b style="font-size: 16px">%</b></b>
+                            <small>Cases Verified</small>
+                        </div>
+                        <div>
+                            <span>SPEED</span>
+                            <b>2<b style="font-size: 16px">s</b></b>
+                            <small>Diagnosis Time</small>
+                        </div>
+                        <div>
+                            <span>FACTORS</span>
+                            <b>5<b style="font-size: 16px">×</b></b>
+                            <small>Independent Analysis</small>
+                        </div>
+                        <div>
+                            <span>CONFIDENCE</span>
+                            <b>95<b style="font-size: 16px">%</b></b>
+                            <small>Average</small>
+                        </div>
+                    </div>
+                    
                     <div class="diagnosis-layout">
-                        <!-- FORM -->
                         <div class="diagnosis-card">
                             <div class="card-heading">
                                 <h2>Quick Diagnosis</h2>
@@ -914,7 +1068,6 @@
                             <div id="alert" class="alert"></div>
                         </div>
                         
-                        <!-- RESULTS -->
                         <div id="resultsBox" style="display: none;">
                             <div class="result-card">
                                 <div class="result-top">
@@ -958,6 +1111,168 @@
                     </div>
                 </div>
                 
+                <!-- PROBLEM PAGE -->
+                <div id="problem" class="tab-content">
+                    <div class="problem-intro">
+                        <h1>The Critical Problem</h1>
+                        <p>
+                            India's electrical goods distribution network faces a hidden crisis: structural fragility. 75% of towns depend on ONLY ONE distributor. 
+                            When that distributor fails—due to bankruptcy, illness, relocation, or market shifts—the entire supply chain collapses overnight. 
+                            This isn't theory. It's happening right now, causing massive retailer churn and lost revenue.
+                        </p>
+                    </div>
+                    
+                    <div class="stat-showcase">
+                        <h3>CRITICAL STATISTICS</h3>
+                        <div class="stat-showcase-grid">
+                            <div class="stat-showcase-item">
+                                <b>75%</b>
+                                <span>Sole-Sourced Towns</span>
+                            </div>
+                            <div class="stat-showcase-item">
+                                <b>100+</b>
+                                <span>Retailers Lose Supply</span>
+                            </div>
+                            <div class="stat-showcase-item">
+                                <b>2-7</b>
+                                <span>Days To Recover</span>
+                            </div>
+                            <div class="stat-showcase-item">
+                                <b>30-40%</b>
+                                <span>Revenue Loss</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="problem-grid">
+                        <div class="problem-card">
+                            <h3>⚡ What Happens When A Distributor Fails</h3>
+                            <ul>
+                                <li><strong>Day 0-1:</strong> Distributor goes dark (accident, illness, bankruptcy)</li>
+                                <li><strong>Day 1-2:</strong> 100+ retail shops discover zero stock</li>
+                                <li><strong>Day 2-3:</strong> Customers can't find products anywhere</li>
+                                <li><strong>Day 3-7:</strong> Retailers switch to competitor brands</li>
+                                <li><strong>Day 7+:</strong> Customer loyalty lost, permanent churn begins</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <h3>💰 Financial Impact Per Incident</h3>
+                            <ul>
+                                <li><strong>Lost Sales:</strong> ₹50,00,000 - ₹1,00,00,000 per town</li>
+                                <li><strong>Retailer Churn:</strong> 30-50% of retail base leaves</li>
+                                <li><strong>Recovery Time:</strong> 2-4 weeks to restore normalcy</li>
+                                <li><strong>Brand Damage:</strong> Customer perception hit</li>
+                                <li><strong>Competitor Gain:</strong> Rivals capture displaced demand</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-section">
+                        <h3>📊 The Hidden Loyalty & Revenue Problem</h3>
+                        <p style="font-size: 13px; color: #555; line-height: 1.6; margin: 0 0 15px;">
+                            Beyond immediate supply loss, distributor failures create a cascade of loyalty program breakdowns:
+                        </p>
+                        <div class="impact-list">
+                            <div class="impact-item"><strong>Lost Loyalty Points:</strong> When supply stops, retailers can't earn/redeem points. 80% of loyalty participants churn.</div>
+                            <div class="impact-item"><strong>Damaged Retailer Relationships:</strong> Retailers lose faith in the supply chain. New distributor appointment takes weeks.</div>
+                            <div class="impact-item"><strong>Order Frequency Collapse:</strong> Shops stop placing orders when product isn't available. Habit is broken permanently.</div>
+                            <div class="impact-item"><strong>Average Order Value Drop:</strong> When supply resumes, retailers order defensively (small quantities). Revenue per order plummets 40-50%.</div>
+                            <div class="impact-item"><strong>Demand Signal Loss:</strong> No orders = no demand data. Next 3 months are a blind spot for forecasting.</div>
+                            <div class="impact-item"><strong>Retailer Activation Rate Crash:</strong> % of active retailers drops from 85% to 20% in just 48 hours.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-table-wrapper">
+                        <h3 style="font: 600 19px 'Space Grotesk'; margin: 0 0 20px; color: var(--ink);">Sample Data: Before, During & After Distributor Failure</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timeframe</th>
+                                    <th>Sales (₹)</th>
+                                    <th>Distributors</th>
+                                    <th>Active Retailers</th>
+                                    <th>Loyalty Points Earned</th>
+                                    <th>Order Frequency</th>
+                                    <th>Avg Order Value</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Jan 2024</strong></td>
+                                    <td>₹1,50,00,000</td>
+                                    <td>2</td>
+                                    <td>45 shops</td>
+                                    <td>2,25,000 pts</td>
+                                    <td>12 orders/mo</td>
+                                    <td>₹3,500</td>
+                                    <td style="color: var(--lime);">✓ HEALTHY</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Feb 2024</strong></td>
+                                    <td>₹1,45,00,000</td>
+                                    <td>2</td>
+                                    <td>45 shops</td>
+                                    <td>2,18,000 pts</td>
+                                    <td>11 orders/mo</td>
+                                    <td>₹3,400</td>
+                                    <td style="color: var(--lime);">✓ HEALTHY</td>
+                                </tr>
+                                <tr style="background: #fff3e0;">
+                                    <td><strong>Mar 2024</strong> <span class="data-highlight">FAILURE</span></td>
+                                    <td style="color: var(--coral);">₹2,50,000</td>
+                                    <td style="color: var(--coral);"><strong>0</strong></td>
+                                    <td style="color: var(--coral);">3 shops</td>
+                                    <td style="color: var(--coral);">12,500 pts</td>
+                                    <td style="color: var(--coral);">0 orders/mo</td>
+                                    <td style="color: var(--coral);">₹83</td>
+                                    <td style="color: var(--coral);">⚠️ CRITICAL</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Apr 2024</strong> (Recovery Started)</td>
+                                    <td>₹35,00,000</td>
+                                    <td>1</td>
+                                    <td>8 shops</td>
+                                    <td>52,500 pts</td>
+                                    <td>2 orders/mo</td>
+                                    <td>₹4,375</td>
+                                    <td style="color: var(--amber);">⚠️ RECOVERING</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>May 2024</strong></td>
+                                    <td>₹65,00,000</td>
+                                    <td>1</td>
+                                    <td>15 shops</td>
+                                    <td>97,500 pts</td>
+                                    <td>5 orders/mo</td>
+                                    <td>₹4,333</td>
+                                    <td style="color: var(--amber);">⚠️ RECOVERING</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jun 2024</strong></td>
+                                    <td>₹1,00,00,000</td>
+                                    <td>1</td>
+                                    <td>22 shops</td>
+                                    <td>1,50,000 pts</td>
+                                    <td>8 orders/mo</td>
+                                    <td>₹4,545</td>
+                                    <td style="color: var(--muted);">⏳ PARTIAL</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="background: #f8f9f7; border-radius: 6px; padding: 25px; margin: 30px 0;">
+                        <h3 style="font: 600 19px 'Space Grotesk'; margin: 0 0 15px;">Key Insight from Data</h3>
+                        <p style="font-size: 13px; color: #555; line-height: 1.6; margin: 0;">
+                            Notice that even AFTER a new distributor is appointed (Apr), recovery is slow and incomplete. By June, sales are still 33% below baseline, 
+                            only 49% of retail shops are re-engaged, and loyalty points earned are still 33% lower than normal. <strong>The damage is permanent without 
+                            redundancy built-in from the start.</strong>
+                        </p>
+                    </div>
+                </div>
+                
                 <!-- MAP TAB -->
                 <div id="map" class="tab-content">
                     <div class="card-heading">
@@ -978,7 +1293,7 @@
                         <div class="card-heading">
                             <h2>Upload Your Data</h2>
                         </div>
-                        <p class="card-lede">CSV format with town_id, division, month, sales, distributors, retailers, activation, frequency, avg_value</p>
+                        <p class="card-lede">CSV format with detailed distribution metrics including loyalty points</p>
                         
                         <div class="upload-surface" id="dropZone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" style="cursor: pointer;">
                             <input type="file" id="fileInput" accept=".csv" style="display:none;" onchange="handleFileSelect(event)">
@@ -1048,6 +1363,7 @@
                 <!-- TABS NAVIGATION -->
                 <div class="tabs-navigation" style="margin-top: 50px; margin-bottom: 30px;">
                     <button class="tab-btn active" onclick="switchTab('diagnose')">QUICK DIAGNOSIS</button>
+                    <button class="tab-btn" onclick="switchTab('problem')">THE PROBLEM</button>
                     <button class="tab-btn" onclick="switchTab('map')">IMPACT MAP</button>
                     <button class="tab-btn" onclick="switchTab('analyze')">DATA ANALYSIS</button>
                     <button class="tab-btn" onclick="switchTab('learn')">LEARN SYSTEM</button>
@@ -1114,7 +1430,6 @@
         
         function displayResults(data) {
             const verdict = data.supervisor_verdict;
-            const isCritical = verdict.severity === "CRITICAL";
             
             document.getElementById("resultTitle").innerText = `${data.town_id} — ${data.division}`;
             document.getElementById("resultMessage").innerText = verdict.recommended_action;
@@ -1140,10 +1455,10 @@
             }).addTo(map);
             
             const locations = [
-                { lat: 28.7041, lng: 77.1025, name: 'T00001 - Delhi', status: 'critical' },
-                { lat: 19.0760, lng: 72.8777, name: 'T00002 - Mumbai', status: 'healthy' },
-                { lat: 13.0827, lng: 80.2707, name: 'T00003 - Chennai', status: 'critical' },
-                { lat: 31.5204, lng: 74.3587, name: 'T00004 - Lahore', status: 'warning' }
+                { lat: 28.7041, lng: 77.1025, name: 'T00001 - Delhi AC', status: 'critical' },
+                { lat: 19.0760, lng: 72.8777, name: 'T00002 - Mumbai Lighting', status: 'healthy' },
+                { lat: 13.0827, lng: 80.2707, name: 'T00003 - Chennai Fans', status: 'critical' },
+                { lat: 31.5204, lng: 74.3587, name: 'T00004 - Lahore Water', status: 'warning' }
             ];
             
             locations.forEach(loc => {
@@ -1196,17 +1511,25 @@
         }
         
         function downloadSample() {
-            const csv = `town_id,division,month,sales,distributors,retailers,activation,frequency,avg_value
-T00001,AC,2024-01,150000,2,45,0.85,12,3500
-T00001,AC,2024-02,145000,2,45,0.83,11,3400
-T00001,AC,2024-03,2000,0,45,0.02,0,44
-T00002,Lighting,2024-01,200000,3,60,0.90,15,3200`;
+            const csv = `town_id,division,month,sales,distributors,retailers,activation,frequency,avg_value,loyalty_points_earned,loyalty_points_redeemed,active_loyalty_members
+T00001,AC,2024-01,1500000,2,45,0.85,12,3500,225000,145000,38
+T00001,AC,2024-02,1450000,2,45,0.83,11,3400,218000,142000,37
+T00001,AC,2024-03,250000,0,45,0.02,0,44,12500,8000,2
+T00002,Lighting,2024-01,2000000,3,60,0.90,15,3200,300000,195000,54
+T00002,Lighting,2024-02,2100000,3,61,0.92,16,3400,315000,205000,56
+T00002,Lighting,2024-03,1850000,2,61,0.78,10,3020,277500,180000,49
+T00003,Fans,2024-01,1200000,1,40,0.75,8,3000,180000,117000,36
+T00003,Fans,2024-02,1250000,1,40,0.80,9,3125,187500,121875,38
+T00003,Fans,2024-03,50000,0,40,0.01,0,12,7500,2250,1
+T00004,Water Heaters,2024-01,1800000,2,50,0.88,14,3600,270000,175500,45
+T00004,Water Heaters,2024-02,1750000,2,50,0.85,13,3500,262500,170625,44
+T00004,Water Heaters,2024-03,1650000,2,50,0.82,12,3300,247500,160875,42`;
             
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'sanchay_sample.csv';
+            a.download = 'sanchay_sample_with_loyalty.csv';
             a.click();
         }
         
