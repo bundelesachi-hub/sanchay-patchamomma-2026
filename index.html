@@ -1379,56 +1379,70 @@
     </div>
     
     <script>
+
+    <script>
         const API_URL = "https://sanchay-406748015906.us-central1.run.app";
         let map = null;
         
         function switchTab(tab) {
+            console.log("Switching to tab:", tab);
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            document.getElementById(tab).classList.add('active');
-            event.target.classList.add('active');
+            const tabEl = document.getElementById(tab);
+            if (tabEl) {
+                tabEl.classList.add('active');
+            }
+            
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
             
             if (tab === 'map') {
                 setTimeout(initMap, 100);
             }
         }
         
-        async function investigate() {
+        function investigate() {
+            console.log("Investigate function called");
+            
             const townId = document.getElementById("townId").value.trim();
             const division = document.getElementById("division").value;
             const btn = event.target;
             
             if (!townId) {
-                showAlert("ENTER TOWN ID", "error");
+                alert("Please enter a town ID");
                 return;
             }
             
             btn.disabled = true;
             btn.innerText = "⚙️ RUNNING...";
             
-            try {
-                const response = await fetch(
-                    `${API_URL}/investigate?town_id=${townId}&division=${division}`,
-                    { method: "POST" }
-                );
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    displayResults(data);
-                    showAlert("DIAGNOSTIC COMPLETE", "success");
-                } else {
-                    showAlert("DIAGNOSTIC FAILED", "error");
+            fetch(`${API_URL}/investigate?town_id=${townId}&division=${division}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Content-Length": "0"
                 }
-            } catch (error) {
-                showAlert(`ERROR: ${error.message}`, "error");
-            } finally {
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response:", data);
+                displayResults(data);
+                alert("✅ DIAGNOSTIC COMPLETE");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert(`❌ ERROR: ${error.message}`);
+            })
+            .finally(() => {
                 btn.disabled = false;
                 btn.innerText = "RUN DIAGNOSTIC";
-            }
+            });
         }
         
         function displayResults(data) {
+            console.log("Displaying results");
             const verdict = data.supervisor_verdict;
             
             document.getElementById("resultTitle").innerText = `${data.town_id} — ${data.division}`;
@@ -1447,6 +1461,8 @@
             if (map) return;
             
             const mapElement = document.getElementById("mapDisplay");
+            if (!mapElement) return;
+            
             map = L.map(mapElement).setView([20.5937, 78.9629], 5);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1499,19 +1515,21 @@
         }
         
         function handleFileUpload(file) {
-            showAlert("ANALYZING...", "error");
+            alert("Processing file...");
             
             setTimeout(() => {
                 document.getElementById("recordCount").innerText = "247";
                 document.getElementById("issueCount").innerText = "12";
                 document.getElementById("analysisTime").innerText = "1.8s";
                 document.getElementById("uploadResults").style.display = "block";
-                showAlert("ANALYSIS COMPLETE | 12 ISSUES FOUND", "success");
+                alert("✅ Analysis complete! 12 issues found.");
             }, 2000);
         }
         
-               function downloadSample() {
-            const csv = `town_id,town_name,region,division,month,sales,distributors,retailers,activation_rate,order_frequency,avg_order_value,loyalty_members,loyalty_points_earned,loyalty_points_redeemed,order_cancellation_rate,payment_delay_days,retailer_health_score,gross_margin,churn_rate,inventory_turnover
+        function downloadSample() {
+            const csv = 
+
+  const csv = `town_id,town_name,region,division,month,sales,distributors,retailers,activation_rate,order_frequency,avg_order_value,loyalty_members,loyalty_points_earned,loyalty_points_redeemed,order_cancellation_rate,payment_delay_days,retailer_health_score,gross_margin,churn_rate,inventory_turnover
 T00001,Delhi,North,AC,2023-06,1500000,2,45,0.82,11,3333,34,55500,36075,0.05,8,82,270000,0.05,13.2
 T00001,Delhi,North,AC,2023-07,1530000,2,46,0.83,11.5,3330,35,58050,37733,0.048,8,83,275400,0.048,13.8
 T00001,Delhi,North,AC,2023-08,1560000,2,46,0.84,12,3333,36,60000,39000,0.046,8,84,280800,0.046,14.4
@@ -1542,10 +1560,21 @@ T00009,Jaipur,North,AC,2023-06,900000,1,28,0.81,10,3214,21,30210,19637,0.05,8,81
 T00009,Jaipur,North,AC,2023-11,135000,0,2,0.07,0.1,33750,0,0,0,0.45,18,7,24300,0.45,0.12
 T00010,Lucknow,North,Water_Heaters,2023-06,1100000,1,32,0.81,10.5,3281,24,39370,25591,0.05,8,81,220000,0.05,12.6`;
             
+      
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'sanchay_detailed_sample.csv';
+            a.download = 'sanchay_sample.csv';
             a.click();
         }
+        
+        document.getElementById("dropZone")?.addEventListener("click", () => {
+            document.getElementById("fileInput").click();
+        });
+        
+        console.log("Sanchay loaded successfully");
+    </script>
+       
+
+          
