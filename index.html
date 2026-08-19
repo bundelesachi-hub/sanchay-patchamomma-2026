@@ -5,392 +5,483 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sanchay - Supply Chain Diagnostics</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         :root {
-            --background: #f7f7f4;
-            --foreground: #222521;
-            --card: #fff;
-            --border: #dfe1dc;
-            --muted: #727872;
-            --coral: #ef6a5b;
-            --lime: #b8df62;
-            --dark: #252b27;
+            --primary: #ef6a5b;
+            --primary-light: #f58577;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-900: #0f172a;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            border-color: var(--border);
         }
-        
+
+        html, body {
+            height: 100%;
+        }
+
         body {
-            background: var(--background);
-            color: var(--foreground);
-            font-family: "IBM Plex Sans", sans-serif;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--slate-50) 0%, #f0f9ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
         }
-        
+
         /* HEADER */
-        .app-header {
-            height: 70px;
-            background: #fff;
-            border-bottom: 1px solid var(--border);
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 28px;
             display: flex;
             align-items: center;
-            padding: 0 28px;
-            gap: 28px;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             position: sticky;
             top: 0;
-            z-index: 20;
+            z-index: 100;
         }
-        
-        .wordmark {
-            font: 700 15px "Space Grotesk";
-            letter-spacing: 0.08em;
-            min-width: 255px;
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            letter-spacing: -0.5px;
         }
-        
-        .header-context {
-            font: 10px "IBM Plex Mono";
-            color: var(--muted);
-            flex: 1;
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .header-status {
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #8dc456;
-            box-shadow: 0 0 0 4px rgba(141, 196, 86, 0.14);
-        }
-        
-        .avatar {
-            background: var(--dark);
-            color: var(--lime);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font: 10px "IBM Plex Mono";
-        }
-        
-        /* APP BODY */
-        .app-body {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-        
-        /* SIDEBAR */
-        .sidebar {
-            width: 255px;
-            background: #f1f3ee;
-            border-right: 1px solid var(--border);
-            padding: 32px 17px 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .sidebar-label {
-            font: 10px "IBM Plex Mono";
-            letter-spacing: 0.13em;
-            color: var(--muted);
-            padding: 0 14px;
-            margin-bottom: 12px;
-        }
-        
-        .side-link {
-            border: 0;
-            background: none;
-            width: 100%;
-            padding: 12px 14px;
-            text-align: left;
-            color: #727872;
             font-size: 13px;
-            border-radius: 4px;
-            margin: 2px 0;
-            transition: 0.18s;
-            cursor: pointer;
+            color: var(--gray-600);
         }
-        
-        .side-link:hover {
-            color: var(--ink);
-            background: #e5e9e0;
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
-        
-        .side-link.active {
-            background: var(--dark);
-            color: #fff;
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
-        
-        .sidebar-rule {
-            border-top: 1px solid var(--border);
-            margin: 24px 14px;
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 28px;
         }
-        
-        .sidebar-bottom {
-            margin-top: auto;
-            padding: 14px;
-            font: 9px "IBM Plex Mono";
-            color: var(--muted);
-        }
-        
-        /* MAIN CANVAS */
-        .main-canvas {
-            flex: 1;
-            min-width: 0;
-            padding: 42px clamp(22px, 4vw, 62px) 35px;
-        }
-        
+
+        /* PAGE TITLE */
         .page-title {
-            font: 700 clamp(27px, 3vw, 38px) "Space Grotesk";
-            letter-spacing: -0.04em;
-            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
-        
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+        }
+
         /* TABS */
-        .tabs-nav {
+        .tabs {
             display: flex;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 30px;
+            gap: 0;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 32px;
+            overflow-x: auto;
         }
-        
+
         .tab-btn {
-            border: 0;
+            border: none;
             background: none;
-            padding: 12px 20px;
-            font: 10px "IBM Plex Mono";
-            color: var(--muted);
-            letter-spacing: 0.1em;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
             cursor: pointer;
+            transition: all 0.2s;
             border-bottom: 2px solid transparent;
-            transition: 0.18s;
+            white-space: nowrap;
         }
-        
+
         .tab-btn:hover {
-            color: var(--foreground);
+            color: var(--dark);
         }
-        
+
         .tab-btn.active {
-            color: var(--coral);
-            border-bottom-color: var(--coral);
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
-        
+
+        /* TAB CONTENT */
         .tab-content {
             display: none;
+            animation: fadeIn 0.3s ease-in;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
-        /* DIAGNOSIS CARD */
-        .diagnosis-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 5px;
-            padding: 27px;
-            max-width: 500px;
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        
-        .card-heading h2 {
-            font: 600 23px "Space Grotesk";
-            margin: 0 0 20px;
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 32px;
         }
-        
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: var(--gray-300);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.3px;
+        }
+
+        /* FORM */
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
-            font: 10px "IBM Plex Mono";
-            color: var(--muted);
             display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
             margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
+
         input, select {
-            display: block;
             width: 100%;
-            margin-top: 8px;
-            border: 1px solid #cfd4cc;
-            background: #fbfcfa;
-            border-radius: 3px;
-            padding: 13px 14px;
-            color: var(--foreground);
-            font: 13px "IBM Plex Sans";
+            padding: 12px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: white;
         }
-        
+
         input:focus, select:focus {
-            outline: 2px solid rgba(239, 106, 91, 0.25);
-            border-color: var(--coral);
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(239, 106, 91, 0.1);
         }
-        
-        button {
-            margin-top: 14px;
-            border: 0;
-            background: var(--coral);
-            border-radius: 3px;
-            padding: 14px 16px;
+
+        /* BUTTON */
+        button.btn-diagnose {
             width: 100%;
-            font: 600 12px "IBM Plex Mono";
-            transition: 0.18s;
+            padding: 14px 16px;
+            background: var(--primary);
             color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 20px;
         }
-        
-        button:hover {
-            background: #f57a6d;
+
+        button.btn-diagnose:hover {
+            background: var(--primary-light);
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 106, 91, 0.3);
         }
-        
-        button:disabled {
+
+        button.btn-diagnose:disabled {
             opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
-        
-        /* RESULTS */
-        .results-box {
-            background: #fff6f4;
-            border: 1px solid #e4b5ad;
-            border-radius: 5px;
+
+        /* RESULTS CARD */
+        .results-card {
+            background: linear-gradient(135deg, #fff5f3 0%, #fff9f7 100%);
+            border: 1px solid #ffd4cc;
+            border-radius: 8px;
             padding: 0;
             overflow: hidden;
-            margin-top: 30px;
             display: none;
+            animation: slideIn 0.3s ease-out;
         }
-        
-        .results-box.show {
+
+        .results-card.show {
             display: block;
         }
-        
-        .result-top {
-            background: #fff6f4;
-            padding: 25px 27px;
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
-        .result-top h2 {
-            font: 700 23px "Space Grotesk";
-            margin: 7px 0 6px;
-            color: var(--foreground);
+
+        .result-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid #ffd4cc;
         }
-        
-        .result-top p {
-            font-size: 12px;
-            color: #73746f;
-            margin: 0;
+
+        .result-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
-        
+
+        .result-header p {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
         .result-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            padding: 20px 27px;
-            border-top: 1px solid #efd5d1;
+            padding: 20px 28px;
+            gap: 20px;
+            border-bottom: 1px solid #ffd4cc;
         }
-        
-        .result-grid > div {
-            border-right: 1px solid var(--border);
-            padding-right: 18px;
-            margin-right: 18px;
+
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        .result-grid > div:last-child {
-            border: 0;
+
+        .result-item {
+            padding-bottom: 0;
         }
-        
-        .result-grid span {
-            font: 9px "IBM Plex Mono";
-            color: var(--muted);
-            display: block;
-        }
-        
-        .result-grid strong {
-            display: block;
-            font: 600 12px "IBM Plex Mono";
-            margin-top: 7px;
-            color: var(--coral);
-        }
-        
-        .action-row {
-            padding: 22px 27px;
-        }
-        
-        .action-row h3 {
-            font: 600 16px "Space Grotesk";
-            margin: 8px 0 5px;
-        }
-        
-        .action-row p {
+
+        .result-item-label {
             font-size: 11px;
-            color: var(--muted);
-            margin: 0;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
-        
+
+        .result-item-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .result-action {
+            padding: 20px 28px;
+        }
+
+        .result-action-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .result-action-value {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--dark);
+        }
+
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-box {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* FEATURE LIST */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-emoji {
+            font-size: 24px;
+            min-width: 32px;
+        }
+
+        .feature-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .feature-content p {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* DARK SECTION */
+        .dark-section {
+            background: var(--slate-900);
+            color: white;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+
+        .dark-section h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .dark-section p {
+            font-size: 15px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
         footer {
-            margin-top: 32px;
-            border-top: 1px solid var(--border);
-            padding-top: 22px;
-            font: 9px "IBM Plex Mono";
-            color: var(--muted);
-        }
-        
-        @media(max-width: 768px) {
-            .sidebar { display: none; }
-            .main-canvas { padding: 26px 15px 25px; }
+            text-align: center;
+            padding: 32px 28px;
+            border-top: 1px solid var(--gray-200);
+            font-size: 12px;
+            color: var(--gray-600);
+            background: white;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <div class="app-body" style="flex-direction: column;">
-        <!-- HEADER -->
-        <header class="app-header">
-            <div class="wordmark">🏥 SANCHAY</div>
-            <div class="header-context">
-                <span class="status-dot"></span>
-                System Nominal | Monitoring Distribution Networks
-            </div>
-            <div class="avatar">SA</div>
-        </header>
-        
-        <div class="app-body">
-            <!-- SIDEBAR -->
-            <aside class="sidebar">
-                <div class="sidebar-label">DIAGNOSTICS</div>
-                <button class="side-link active" onclick="switchTab('diagnose', event)">🔍 Quick Diagnosis</button>
-                <button class="side-link" onclick="switchTab('problem', event)">⚠️ The Problem</button>
-                
-                <div class="sidebar-rule"></div>
-                
-                <div class="sidebar-label">INFO</div>
-                <button class="side-link" onclick="switchTab('learn', event)">📚 Learn System</button>
-                
-                <div class="sidebar-bottom">
-                    Last updated 2 mins ago
-                </div>
-            </aside>
-            
-            <!-- MAIN CANVAS -->
-            <main class="main-canvas">
-                <h1 class="page-title">Distribution Health Check</h1>
-                
-                <!-- DIAGNOSIS TAB -->
-                <div id="diagnose" class="tab-content active">
-                    <div class="diagnosis-card">
-                        <div class="card-heading">
-                            <h2>Quick Diagnosis</h2>
-                        </div>
-                        
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">🏥 <span>Sanchay</span></div>
+        <div class="header-status">
+            <span class="status-dot"></span>
+            System Nominal
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <h1 class="page-title">Distribution Health Check</h1>
+        <p class="page-subtitle">Diagnose supply chain anomalies in real-time</p>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('diagnose', event)">🔍 Quick Diagnosis</button>
+            <button class="tab-btn" onclick="switchTab('problem', event)">⚠️ The Problem</button>
+            <button class="tab-btn" onclick="switchTab('learn', event)">📚 Learn System</button>
+        </div>
+
+        <!-- DIAGNOSE TAB -->
+        <div id="diagnose" class="tab-content active">
+            <div class="grid">
+                <!-- Form Card -->
+                <div class="card">
+                    <h3 class="card-title">Run Diagnosis</h3>
+                    
+                    <form onsubmit="runDiagnosis(event)">
                         <div class="form-group">
-                            <label>TOWN ID</label>
-                            <input type="text" id="town" value="T00001" placeholder="e.g., T00001">
+                            <label>Town ID</label>
+                            <input type="text" id="town" value="T00001" placeholder="e.g., T00001" required>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label>DIVISION</label>
+                            <label>Division</label>
                             <select id="div">
                                 <option>AC</option>
                                 <option>Lighting</option>
@@ -398,130 +489,186 @@
                                 <option>Water Heaters</option>
                             </select>
                         </div>
-                        
-                        <button onclick="runDiagnosis()">RUN DIAGNOSTIC</button>
+
+                        <button type="submit" class="btn-diagnose" id="diagnoseBtn">🔍 Run Diagnostic</button>
+                    </form>
+                </div>
+
+                <!-- Results Card -->
+                <div id="results" class="results-card">
+                    <div class="result-header">
+                        <h3 id="resultTown"></h3>
+                        <p id="resultMessage"></p>
                     </div>
-                    
-                    <!-- RESULTS -->
-                    <div class="results-box" id="results">
-                        <div class="result-top">
-                            <h2 id="resultTown"></h2>
-                            <p id="resultMessage"></p>
+
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="result-item-label">Primary Issue</div>
+                            <div class="result-item-value" id="resultIssue"></div>
                         </div>
-                        
-                        <div class="result-grid">
-                            <div>
-                                <span>PRIMARY ISSUE</span>
-                                <strong id="resultIssue"></strong>
-                            </div>
-                            <div>
-                                <span>SEVERITY</span>
-                                <strong id="resultSeverity"></strong>
-                            </div>
-                            <div>
-                                <span>IMPACT</span>
-                                <strong id="resultImpact"></strong>
-                            </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Severity</div>
+                            <div class="result-item-value" id="resultSeverity"></div>
                         </div>
-                        
-                        <div class="action-row">
-                            <h3>RECOMMENDED ACTION</h3>
-                            <p id="resultAction"></p>
+                        <div class="result-item">
+                            <div class="result-item-label">Confidence</div>
+                            <div class="result-item-value" id="resultConfidence"></div>
                         </div>
+                    </div>
+
+                    <div class="result-action">
+                        <div class="result-action-label">Recommended Action</div>
+                        <div class="result-action-value" id="resultAction"></div>
                     </div>
                 </div>
-                
-                <!-- PROBLEM TAB -->
-                <div id="problem" class="tab-content">
-                    <div style="background: var(--dark); color: white; border-radius: 6px; padding: 30px; margin-bottom: 30px;">
-                        <h2 style="font: 700 2em 'Space Grotesk'; margin-bottom: 15px;">The Critical Problem</h2>
-                        <p style="font-size: 1.1em; line-height: 1.6; color: #bbc2b9;">
-                            75% of towns depend on a SINGLE distributor. When that distributor fails, your entire supply chain collapses overnight. 
-                            Sanchay detects these failures instantly and recommends how to fix them.
-                        </p>
-                    </div>
-                    
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 5px; padding: 27px;">
-                        <h3 style="font: 600 1.3em 'Space Grotesk'; margin-bottom: 20px;">Critical Statistics</h3>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-                            <div>
-                                <div style="font: 700 2.5em 'Space Grotesk'; color: var(--coral);">75%</div>
-                                <div style="font: 10px 'IBM Plex Mono'; color: var(--muted);">SOLE-SOURCED TOWNS</div>
-                            </div>
-                            <div>
-                                <div style="font: 700 2.5em 'Space Grotesk'; color: var(--coral);">100+</div>
-                                <div style="font: 10px 'IBM Plex Mono'; color: var(--muted);">RETAILERS AFFECTED</div>
-                            </div>
-                            <div>
-                                <div style="font: 700 2.5em 'Space Grotesk'; color: var(--coral);">30-40%</div>
-                                <div style="font: 10px 'IBM Plex Mono'; color: var(--muted);">REVENUE LOSS</div>
-                            </div>
-                            <div>
-                                <div style="font: 700 2.5em 'Space Grotesk'; color: var(--coral);">2-7 days</div>
-                                <div style="font: 10px 'IBM Plex Mono'; color: var(--muted);">RECOVERY TIME</div>
-                            </div>
+            </div>
+        </div>
+
+        <!-- PROBLEM TAB -->
+        <div id="problem" class="tab-content">
+            <div class="dark-section">
+                <h2>The Critical Problem</h2>
+                <p>75% of towns depend on a SINGLE distributor. When that distributor fails, your entire supply chain collapses overnight. Sanchay detects these failures instantly.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">75%</div>
+                    <div class="stat-label">Sole-Sourced Towns</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Retailers Affected</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">30-40%</div>
+                    <div class="stat-label">Revenue Loss</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">2-7d</div>
+                    <div class="stat-label">Recovery Time</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Why This Matters</h3>
+                <p style="margin-bottom: 16px; color: var(--gray-600);">
+                    When a sole-sourced distributor fails, the impact ripples through your entire network:
+                </p>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="feature-emoji">📉</span>
+                        <div class="feature-content">
+                            <h4>Sales Collapse</h4>
+                            <p>Retailers can't reorder, stopping all revenue</p>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- LEARN TAB -->
-                <div id="learn" class="tab-content">
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 5px; padding: 27px;">
-                        <h2 style="font: 600 1.5em 'Space Grotesk'; margin-bottom: 20px;">How Sanchay Works</h2>
-                        <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">
-                            Sanchay analyzes 5 independent factors in your sales data to determine WHY sales collapsed.
-                        </p>
-                        <div style="background: #f4f6f1; padding: 20px; border-radius: 5px;">
-                            <p style="margin: 8px 0;"><strong>🏭 Suppliers:</strong> How many distributors you have</p>
-                            <p style="margin: 8px 0;"><strong>📊 Demand:</strong> How many shops want to buy</p>
-                            <p style="margin: 8px 0;"><strong>📈 Frequency:</strong> How often shops order</p>
-                            <p style="margin: 8px 0;"><strong>💰 Value:</strong> Average sale per shop</p>
-                            <p style="margin: 8px 0;"><strong>🔗 Pipeline:</strong> Supply vs demand balance</p>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">😠</span>
+                        <div class="feature-content">
+                            <h4>Retailer Churn</h4>
+                            <p>Shops switch to competitors who can supply</p>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- TABS NAV -->
-                <div class="tabs-nav" style="margin-top: 50px;">
-                    <button class="tab-btn active" onclick="switchTab('diagnose', event)">QUICK DIAGNOSIS</button>
-                    <button class="tab-btn" onclick="switchTab('problem', event)">THE PROBLEM</button>
-                    <button class="tab-btn" onclick="switchTab('learn', event)">LEARN SYSTEM</button>
-                </div>
-                
-                <footer>
-                    <span>SANCHAY v1.0 | Supply Chain Diagnostics Platform</span>
-                </footer>
-            </main>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">💔</span>
+                        <div class="feature-content">
+                            <h4>Loyalty Damage</h4>
+                            <p>Hard-earned loyalty programs lose members</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">⏱️</span>
+                        <div class="feature-content">
+                            <h4>Recovery Gap</h4>
+                            <p>Rebuilding trust takes weeks, not days</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LEARN TAB -->
+        <div id="learn" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">How Sanchay Works</h3>
+                <p style="margin-bottom: 24px; color: var(--gray-600);">
+                    Sanchay analyzes 5 independent factors in your sales data to pinpoint exactly what caused the collapse:
+                </p>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="feature-emoji">🏭</span>
+                        <div class="feature-content">
+                            <h4>Suppliers</h4>
+                            <p>How many distributors are serving this town</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">📊</span>
+                        <div class="feature-content">
+                            <h4>Demand Signal</h4>
+                            <p>How many retailers actively want to buy</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">📈</span>
+                        <div class="feature-content">
+                            <h4>Order Frequency</h4>
+                            <p>How often retailers are placing orders</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">💰</span>
+                        <div class="feature-content">
+                            <h4>Average Order Value</h4>
+                            <p>Size and quality of each transaction</p>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-emoji">🔗</span>
+                        <div class="feature-content">
+                            <h4>Pipeline Health</h4>
+                            <p>Supply-demand balance and inventory dynamics</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-    
+
+    <!-- FOOTER -->
+    <footer>
+        Sanchay v1.0 • Supply Chain Diagnostics Platform • Powered by Google Cloud
+    </footer>
+
     <script>
         const API_URL = "https://sanchay-406748015906.us-central1.run.app";
-        
+
         function switchTab(tab, event) {
-            // Hide all tabs
+            // Hide all
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.side-link').forEach(el => el.classList.remove('active'));
-            
-            // Show selected tab
+
+            // Show selected
             document.getElementById(tab).classList.add('active');
-            if (event) event.target.classList.add('active');
+            event.target.classList.add('active');
         }
-        
-        function runDiagnosis() {
+
+        function runDiagnosis(event) {
+            event.preventDefault();
+
             const town = document.getElementById('town').value.trim();
             const div = document.getElementById('div').value;
-            const btn = event.target;
-            
+            const btn = document.getElementById('diagnoseBtn');
+
             if (!town) {
-                alert('Enter town ID');
+                alert('Please enter a town ID');
                 return;
             }
-            
+
             btn.disabled = true;
-            btn.innerText = '⚙️ RUNNING...';
-            
+            btn.innerText = '⚙️ Running...';
+
             fetch(`${API_URL}/investigate?town_id=${town}&division=${div}`, {
                 method: 'POST'
             })
@@ -532,14 +679,17 @@
                 document.getElementById('resultMessage').innerText = v.recommended_action;
                 document.getElementById('resultIssue').innerText = v.primary_cause.replace(/_/g, ' ').toUpperCase();
                 document.getElementById('resultSeverity').innerText = v.severity;
-                document.getElementById('resultImpact').innerText = v.impact;
+                document.getElementById('resultConfidence').innerText = `${(v.confidence * 100).toFixed(0)}%`;
                 document.getElementById('resultAction').innerText = v.recommended_action;
                 document.getElementById('results').classList.add('show');
             })
-            .catch(e => alert('Error: ' + e))
+            .catch(e => {
+                console.error('Error:', e);
+                alert('Error: ' + e.message);
+            })
             .finally(() => {
                 btn.disabled = false;
-                btn.innerText = 'RUN DIAGNOSTIC';
+                btn.innerText = '🔍 Run Diagnostic';
             });
         }
     </script>
