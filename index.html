@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sanchay - Supply Chain Diagnostics</title>
+    
+    <!-- Leaflet.js for Maps -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -219,6 +224,31 @@
         }
 
         /* BUTTON */
+        .btn {
+            padding: 12px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 106, 91, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         button.btn-diagnose {
             width: 100%;
             padding: 14px 16px;
@@ -231,6 +261,7 @@
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 20px;
+            font-family: 'Inter', sans-serif;
         }
 
         button.btn-diagnose:hover {
@@ -560,6 +591,25 @@
         .alert.show {
             display: block;
         }
+
+        /* MAP STYLES */
+        #coverageMap {
+            width: 100%;
+            height: 600px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .leaflet-popup-content {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
     </style>
 </head>
 <body>
@@ -575,14 +625,15 @@
     <!-- MAIN CONTENT -->
     <div class="container">
         <h1 class="page-title">Distribution Health Check</h1>
-        <p class="page-subtitle">Real-time supply chain diagnostics for FMCG networks</p>
+        <p class="page-subtitle">Real-time supply chain diagnostics + AI-powered insights for FMCG networks</p>
 
-        <!-- TABS -->
+        <!-- PRIMARY TABS -->
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('diagnose', event)">🔍 Quick Diagnosis</button>
             <button class="tab-btn" onclick="switchTab('problem', event)">⚠️ The Problem</button>
             <button class="tab-btn" onclick="switchTab('data', event)">📊 Data Analysis</button>
-            <button class="tab-btn" onclick="switchTab('learn', event)">📚 Learn System</button>
+            <button class="tab-btn" onclick="switchTab('coverage', event)">📍 Coverage Map</button>
+            <button class="tab-btn" onclick="switchTab('agents-detail', event)">🤖 AI Agents</button>
         </div>
 
         <!-- ====== DIAGNOSE TAB ====== -->
@@ -826,82 +877,66 @@
             </div>
         </div>
 
-        <!-- ====== LEARN TAB ====== -->
-        <div id="learn" class="tab-content">
+        <!-- ====== COVERAGE MAP TAB ====== -->
+        <div id="coverage" class="tab-content">
             <div class="card">
-                <h3 class="card-title">How Sanchay Works</h3>
-                <p style="margin-bottom: 24px; color: var(--gray-600);">
-                    Sanchay analyzes 5 independent factors in your sales data to pinpoint exactly what caused the collapse:
-                </p>
-                <ul class="feature-list">
-                    <li class="feature-item">
-                        <span class="feature-emoji">🏭</span>
-                        <div class="feature-content">
-                            <h4>Supplier Network (Distributors)</h4>
-                            <p>Analyzes how many distributors serve each town. Sole-sourced = high risk of complete failure.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-emoji">📊</span>
-                        <div class="feature-content">
-                            <h4>Demand Signal (Activation Rate)</h4>
-                            <p>Measures how many retailers actively want to buy. Drop = retailers losing interest or switching.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-emoji">📈</span>
-                        <div class="feature-content">
-                            <h4>Order Frequency</h4>
-                            <p>Tracks how often retailers place orders. Decline = demand weakness or supply issues.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-emoji">💰</span>
-                        <div class="feature-content">
-                            <h4>Average Order Value</h4>
-                            <p>Measures transaction size per shop. Collapse = price pressure or product mix shift.</p>
-                        </div>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-emoji">🔗</span>
-                        <div class="feature-content">
-                            <h4>Pipeline Health (Supply-Demand Balance)</h4>
-                            <p>Identifies structural gaps between what retailers want and what they can get.</p>
-                        </div>
-                    </li>
-                </ul>
+                <h3 class="card-title">📍 Geographic Service Area</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                    <div>
+                        <label>Select Distributor</label>
+                        <select id="coverageDistributor" style="padding: 10px 14px; width: 100%;">
+                            <option value="">Loading distributors...</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button class="btn" onclick="showCoverage()" style="width: 100%;">📍 Show Coverage Area</button>
+                    </div>
+                </div>
+                <div id="coverageMap"></div>
             </div>
 
-            <div class="card" style="margin-top: 28px;">
-                <h3 class="card-title">Our Accuracy</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                    <div>
-                        <p style="color: var(--gray-600); margin-bottom: 12px;">100 real-world test cases analyzed:</p>
-                        <ul style="list-style: none; color: var(--dark); font-size: 14px;">
-                            <li style="margin-bottom: 8px;">✅ <strong>94% Precision</strong> - Correctly identified issues</li>
-                            <li style="margin-bottom: 8px;">✅ <strong>98% Recall</strong> - Caught all anomalies</li>
-                            <li style="margin-bottom: 8px;">✅ <strong>0.95 Avg Confidence</strong> - High certainty results</li>
-                            <li style="margin-bottom: 8px;">✅ <strong>100% Detection</strong> - All sole-sourced failures caught</li>
-                        </ul>
-                    </div>
-                    <div style="background: var(--gray-100); padding: 20px; border-radius: 8px;">
-                        <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 12px;">Tested on:</p>
-                        <ul style="list-style: none; color: var(--dark); font-size: 14px;">
-                            <li style="margin-bottom: 8px;">🌍 10 cities across India</li>
-                            <li style="margin-bottom: 8px;">📦 5 product divisions</li>
-                            <li style="margin-bottom: 8px;">📅 18 months of data</li>
-                            <li style="margin-bottom: 8px;">🛍️ 290K+ retailer records</li>
-                        </ul>
-                    </div>
+            <div class="card" style="margin-top: 20px;">
+                <h3 class="card-title">Coverage Statistics</h3>
+                <div id="coverageStats">
+                    <p style="text-align: center; color: var(--gray-600); padding: 40px;">Select a distributor to see coverage details</p>
                 </div>
             </div>
         </div>
+
+        <!-- ====== AI AGENTS TAB ====== -->
+        <div id="agents-detail" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">🤖 AI Predictive Agents Analysis</h3>
+                <p style="color: var(--gray-600); margin-bottom: 20px;">
+                    Gemini-powered AI agents analyze your supply chain from 5 unique perspectives and generate predictive, actionable insights.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                    <div>
+                        <label>Town</label>
+                        <input type="text" id="agentTown" value="T00001" style="padding: 10px 14px;">
+                    </div>
+                    <div>
+                        <label>Division</label>
+                        <select id="agentDivision" style="padding: 10px 14px;">
+                            <option>AC</option>
+                            <option>Lighting</option>
+                            <option>Fans</option>
+                            <option>Water_Heaters</option>
+                            <option>Kitchen</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="runAIAnalysis()" style="width: 100%; margin-bottom: 20px; padding: 14px;">🚀 Run AI Analysis (30-45 seconds)</button>
+                <div id="agentResults"></div>
+            </div>
+        </div>
+
     </div>
 
     <!-- FOOTER -->
     <footer>
         <div class="footer-content">
-            <div>Sanchay v1.0 • Supply Chain Diagnostics Platform • Powered by Google Cloud</div>
+            <div>Sanchay v3.0 • AI-Powered Supply Chain Diagnostics • Powered by Google Cloud + Gemini</div>
             <div class="footer-links">
                 <a href="https://github.com/bundelesachi-hub/sanchay-patchamomma-2026" target="_blank">
                     📂 GitHub Repository
@@ -916,6 +951,12 @@
     <script>
         const API_URL = "https://sanchay-406748015906.us-central1.run.app";
 
+        let coverageMap = null;
+
+        // =========================================================================
+        // TAB SWITCHING
+        // =========================================================================
+
         function switchTab(tab, event) {
             // Hide all
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -925,6 +966,10 @@
             document.getElementById(tab).classList.add('active');
             event.target.classList.add('active');
         }
+
+        // =========================================================================
+        // QUICK DIAGNOSIS
+        // =========================================================================
 
         function runDiagnosis(event) {
             event.preventDefault();
@@ -968,18 +1013,211 @@
             });
         }
 
+        // =========================================================================
+        // COVERAGE MAP
+        // =========================================================================
+
+        function loadDistributorsForCoverage() {
+            fetch(`${API_URL}/distributors`)
+                .then(r => r.json())
+                .then(data => {
+                    const select = document.getElementById('coverageDistributor');
+                    select.innerHTML = '<option value="">Select a distributor...</option>';
+                    (data.distributors || []).forEach(d => {
+                        select.innerHTML += `<option value="${d.distributor_id}">${d.distributor_name} (${d.retailers_active} retailers)</option>`;
+                    });
+                })
+                .catch(e => console.error('Error:', e));
+        }
+
+        function showCoverage() {
+            const distributorId = document.getElementById('coverageDistributor').value;
+            if (!distributorId) {
+                alert('Please select a distributor');
+                return;
+            }
+
+            fetch(`${API_URL}/distributor-coverage/${distributorId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                        return;
+                    }
+
+                    // Initialize map
+                    if (coverageMap) {
+                        coverageMap.remove();
+                    }
+                    
+                    coverageMap = L.map('coverageMap').setView(
+                        [data.latitude, data.longitude], 
+                        12
+                    );
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
+                        maxZoom: 19
+                    }).addTo(coverageMap);
+
+                    // Draw distributor hub
+                    L.circleMarker([data.latitude, data.longitude], {
+                        radius: 15,
+                        fillColor: '#ef6a5b',
+                        color: '#ef6a5b',
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.9
+                    }).addTo(coverageMap).bindPopup(`<b>${data.distributor_name}</b><br/>Distributor Hub<br/>Serving ${data.total_retailers} retailers`);
+
+                    // Draw retailers
+                    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+                    (data.retailers || []).forEach((r, idx) => {
+                        L.circleMarker([r.latitude, r.longitude], {
+                            radius: 6,
+                            fillColor: colors[idx % colors.length],
+                            color: colors[idx % colors.length],
+                            weight: 1,
+                            opacity: 0.8,
+                            fillOpacity: 0.6
+                        }).addTo(coverageMap).bindPopup(`<b>${r.retailer_name}</b><br/>₹${r.avg_order_value.toLocaleString()}/order`);
+                    });
+
+                    // Draw service area boundary
+                    const { north, south, east, west } = data.service_area;
+                    const bounds = L.latLngBounds(
+                        [south, west],
+                        [north, east]
+                    );
+                    
+                    L.rectangle(bounds, {
+                        color: '#3b82f6',
+                        weight: 2,
+                        opacity: 0.3,
+                        fillOpacity: 0.05,
+                        dashArray: '5, 5'
+                    }).addTo(coverageMap);
+
+                    coverageMap.fitBounds(bounds);
+
+                    // Display statistics
+                    const stats = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div style="padding: 12px; background: var(--gray-100); border-radius: 6px;">
+                                <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase;">Total Retailers</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--primary); margin-top: 8px;">${data.total_retailers}</div>
+                            </div>
+                            <div style="padding: 12px; background: var(--gray-100); border-radius: 6px;">
+                                <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase;">Monthly Revenue</div>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 8px;">₹${(data.total_revenue_monthly / 100000).toFixed(1)}L</div>
+                            </div>
+                            <div style="padding: 12px; background: var(--gray-100); border-radius: 6px;">
+                                <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase;">Lat Range</div>
+                                <div style="font-size: 12px; color: var(--dark); margin-top: 8px;">${data.service_area.south.toFixed(3)}° → ${data.service_area.north.toFixed(3)}°</div>
+                            </div>
+                            <div style="padding: 12px; background: var(--gray-100); border-radius: 6px;">
+                                <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase;">Lng Range</div>
+                                <div style="font-size: 12px; color: var(--dark); margin-top: 8px;">${data.service_area.west.toFixed(3)}° → ${data.service_area.east.toFixed(3)}°</div>
+                            </div>
+                            <div style="padding: 12px; background: var(--gray-100); border-radius: 6px; grid-column: 1/-1;">
+                                <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase;">Retailer Density & Center</div>
+                                <div style="font-size: 13px; color: var(--dark); margin-top: 8px;"><strong>${data.density.toFixed(1)} retailers/degree²</strong><br/>Center: (${data.service_area.center_lat.toFixed(4)}, ${data.service_area.center_lng.toFixed(4)})</div>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('coverageStats').innerHTML = stats;
+                })
+                .catch(e => console.error('Error:', e));
+        }
+
+        // =========================================================================
+        // AI AGENTS ANALYSIS
+        // =========================================================================
+
+        function runAIAnalysis() {
+            const town = document.getElementById('agentTown').value;
+            const division = document.getElementById('agentDivision').value;
+            
+            if (!town) {
+                alert('Enter town ID');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('agentResults');
+            resultsDiv.innerHTML = '<div style="text-align: center; color: var(--gray-600); padding: 40px;"><p style="margin-bottom: 12px;">🔄 Activating AI Agents...</p><p style="font-size: 12px;">Distributor • Activation • Frequency • Value • Pipeline</p><p style="font-size: 11px; margin-top: 12px; color: var(--gray-400);">This takes 30-45 seconds as each agent analyzes your supply chain independently using Gemini API</p></div>';
+
+            fetch(`${API_URL}/analyze?town_id=${town}&division=${division}`, { method: 'POST' })
+                .then(r => r.json())
+                .then(d => {
+                    let html = `<div style="margin-bottom: 24px; padding: 16px; background: var(--slate-50); border-radius: 8px; border-left: 4px solid var(--primary);"><h4 style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">${d.town_id} — ${d.division}</h4><p style="font-size: 12px; color: var(--gray-600);">5 AI Agents analyzed your supply chain • Unique predictions for each factor</p></div>`;
+                    
+                    const agentOrder = ['distributor', 'activation', 'frequency', 'value', 'pipeline'];
+                    const emojis = {
+                        distributor: '🏭',
+                        activation: '📊',
+                        frequency: '📈',
+                        value: '💰',
+                        pipeline: '🔗'
+                    };
+
+                    agentOrder.forEach(type => {
+                        const agent = d.agents[type];
+                        if (agent.error) {
+                            html += `<div style="padding: 16px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; margin-bottom: 16px;">
+                                <strong style="color: #dc2626;">${agent.agent}</strong>: Error - ${agent.error}
+                            </div>`;
+                            return;
+                        }
+
+                        const analysis = agent.analysis;
+                        const riskKeys = ['risk_level', 'engagement_risk', 'demand_risk', 'pricing_trend', 'stockout_risk'];
+                        const riskLevel = riskKeys.map(k => analysis[k]).find(v => v);
+
+                        html += `
+                            <div style="padding: 20px; background: white; border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: 16px;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 16px; color: var(--dark);">${emojis[type]} ${agent.agent}</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div style="padding: 12px; background: var(--gray-100); border-radius: 6px;">
+                                        <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; margin-bottom: 6px;">Risk Level</div>
+                                        <div style="font-size: 14px; font-weight: 700; color: var(--primary);">${riskLevel || 'Unknown'}</div>
+                                    </div>
+                                    <div style="padding: 12px; background: var(--gray-100); border-radius: 6px;">
+                                        <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; margin-bottom: 6px;">Confidence</div>
+                                        <div style="font-size: 14px; font-weight: 700; color: var(--primary);">${((analysis.confidence || 0) * 100).toFixed(0)}%</div>
+                                    </div>
+                                </div>
+                                <div style="background: #f8fafc; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+                                    <div style="font-size: 12px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; margin-bottom: 6px;">Prediction</div>
+                                    <div style="font-size: 13px; color: var(--dark); line-height: 1.5;">${analysis.prediction}</div>
+                                </div>
+                                <div style="background: #fef3f1; padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+                                    <div style="font-size: 12px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; margin-bottom: 6px;">Recommended Action</div>
+                                    <div style="font-size: 13px; color: var(--dark); line-height: 1.5;">${analysis.recommended_action}</div>
+                                </div>
+                                <div style="font-size: 12px; color: var(--gray-600); border-top: 1px solid var(--gray-200); padding-top: 12px;">
+                                    <strong>Timeline/Impact:</strong> ${analysis.timeline || analysis.expected_impact || analysis.revenue_impact || analysis.upsell_opportunity || 'Immediate action required'}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    resultsDiv.innerHTML = html;
+                })
+                .catch(e => {
+                    resultsDiv.innerHTML = `<div style="padding: 16px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; color: #dc2626;"><strong>Error:</strong> ${e}</div>`;
+                });
+        }
+
+        // =========================================================================
+        // DATA UPLOAD
+        // =========================================================================
+
         function downloadSample() {
             const csv = `town_id,town_name,region,division,month,sales,distributors,retailers,activation_rate,order_frequency,avg_order_value,loyalty_members,loyalty_points_earned,loyalty_points_redeemed,order_cancellation_rate,payment_delay_days,retailer_health_score,gross_margin,churn_rate,inventory_turnover
 T00001,Delhi,North,AC,2024-06,1500000,2,45,0.82,11,3333,34,55500,36075,0.05,8,82,270000,0.05,13.2
 T00001,Delhi,North,AC,2024-07,1530000,2,46,0.83,11.5,3330,35,58050,37733,0.048,8,83,275400,0.048,13.8
 T00002,Mumbai,West,Lighting,2024-06,2200000,3,65,0.85,14,3448,50,86000,55900,0.04,7,85,550000,0.04,16.8
-T00002,Mumbai,West,Lighting,2024-07,2244000,3,66,0.86,14.3,3402,51,87912,57143,0.039,7,86,561000,0.039,17.2
-T00003,Bangalore,South,Fans,2024-06,1800000,2,52,0.84,12.5,3474,39,68160,44304,0.05,8,84,396000,0.05,15
-T00003,Bangalore,South,Fans,2024-07,1836000,2,53,0.85,12.7,3453,40,69648,45321,0.049,8,85,403920,0.049,15.2
-T00004,Chennai,South,Water_Heaters,2024-06,1400000,1,40,0.82,11.5,3043,30,45645,29669,0.05,8,82,280000,0.05,13.8
-T00005,Hyderabad,South,Kitchen,2024-06,1600000,2,48,0.83,12,3367,36,60528,39343,0.05,8,83,304000,0.05,14.4
-T00006,Kolkata,East,AC,2024-06,1200000,1,35,0.81,10,3429,27,41000,26650,0.05,8,81,216000,0.05,12
-T00007,Pune,West,Lighting,2024-06,1450000,2,42,0.83,12,3452,35,57638,37465,0.05,8,83,362500,0.05,14.4`;
+T00002,Mumbai,West,Lighting,2024-07,2244000,3,66,0.86,14.3,3402,51,87912,57143,0.039,7,86,561000,0.039,17.2`;
             
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
@@ -1009,7 +1247,6 @@ T00007,Pune,West,Lighting,2024-06,1450000,2,42,0.83,12,3452,35,57638,37465,0.05,
             }, 2000);
         }
 
-        // Drag and drop
         const dropZone = document.getElementById('dropZone');
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -1026,6 +1263,14 @@ T00007,Pune,West,Lighting,2024-06,1450000,2,42,0.83,12,3452,35,57638,37465,0.05,
                 document.getElementById('fileInput').files = files;
                 handleFileUpload({ target: { files } });
             }
+        });
+
+        // =========================================================================
+        // INITIALIZATION
+        // =========================================================================
+
+        window.addEventListener('load', () => {
+            loadDistributorsForCoverage();
         });
     </script>
 </body>
